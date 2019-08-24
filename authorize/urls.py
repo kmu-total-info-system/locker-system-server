@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from auth.views import Account
+from authorize.views import Account
 
 urlpatterns = [
     path('account/', Account.as_view()),
