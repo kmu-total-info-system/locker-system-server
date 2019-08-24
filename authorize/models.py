@@ -6,9 +6,7 @@ from django.db import models
 class MyUserManager(BaseUserManager):
     def create_user(self, user_id, password, extra_fields):
         kwargs = extra_fields.copy()
-        print(extra_fields)
         kwargs['grade'] = int(kwargs['grade'][0])
-        print(kwargs)
         user = self.model(
             **kwargs
         )
@@ -54,7 +52,10 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name',]
 
     def __str__(self):
-        return ""
+        ret = self.user_id
+        if self.name != None:
+            ret+=" "+self.name
+        return ret
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
