@@ -16,6 +16,7 @@ class Block(models.Model):
         (4, 'locker'),
         (5, 'stairs'),
         (0, 'None'),
+        (6, 'Divide'),
     )
     LOCKER_STATES = (
         (1, '신청가능'),
