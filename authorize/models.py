@@ -15,9 +15,9 @@ class MyUserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, user_id, password):
+    def create_superuser(self, user_id, password,name):
         user = self.model(
-            user_id=user_id, password=password
+            user_id=user_id, password=password,name = name
         )
         user.is_active = True
         user.is_admin = True
@@ -31,7 +31,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "유저정보"
 
     user_id = models.CharField(max_length=9, verbose_name="학번")
-    name = models.CharField(max_length=7, verbose_name="이름",blank=True,null=True)
+    name = models.CharField(max_length=7, verbose_name="이름")
     ssn = models.CharField(max_length=40, verbose_name="주민등록번호",blank=True,null=True)
     college = models.CharField(max_length=40, verbose_name="대학명",blank=True,null=True)
     school = models.CharField(max_length=40, verbose_name="스쿨이름",blank=True,null=True)
