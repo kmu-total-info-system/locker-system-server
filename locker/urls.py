@@ -16,13 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from locker.views import Locker
+from locker.views import Locker, Transaction
 
 urlpatterns = [
 
     path('',  include([
         path('', Locker.as_view()),
         path('<int:id>', Locker.as_view()),
-
     ])),
+    path('transaction',Transaction.as_view())
 ]
