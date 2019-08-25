@@ -13,3 +13,9 @@ class SheetAdmin(admin.ModelAdmin):
     base_model = Sheet  # Explicitly set here!
 
     list_display = [field.name for field in Sheet._meta.fields]
+
+@admin.register(Transaction)
+class SheetAdmin(admin.ModelAdmin):
+    base_model = Transaction  # Explicitly set here!
+
+    list_display = [field.name for field in Transaction._meta.fields]
