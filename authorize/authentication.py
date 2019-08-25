@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model, user_logged_in
 from django.contrib.auth.backends import ModelBackend
 
 UserModel = get_user_model()
-VALIDATE_DAYS = 30
+VALIDATE_DAYS = 1
 
 class KtisBackend(ModelBackend):
     def authenticate(self, request,username=None, password=None, **kwargs):
@@ -12,6 +12,7 @@ class KtisBackend(ModelBackend):
             username = kwargs.get(UserModel.USERNAME_FIELD)
 
         res = ktis_parser.parseInfo(username, password)
+
         if not bool(res['status']):
             try:
                 user = UserModel._default_manager.get_by_natural_key(username)
@@ -21,9 +22,10 @@ class KtisBackend(ModelBackend):
                 if user.check_password(password):
                     return user
                 else:
-                    return res['content']
+                    return None
         else:
             try:
+
                 user = UserModel._default_manager.get_by_natural_key(username)
             except:
                 user = UserModel.objects.create_user(user_id=username,
