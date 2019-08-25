@@ -10,11 +10,18 @@ UserModel = get_user_model()
 class BlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Block
-        fields = '_all_'
+        fields = '__all__'
 
 
 class SheetSerializer(serializers.ModelSerializer):
     blocks = BlockSerializer(many=True)
+
+    class Meta:
+        model = Sheet
+        fields = '__all__'
+
+
+class SheetSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sheet
         fields = '__all__'

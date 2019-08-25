@@ -14,10 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from locker.views import Locker
 
 urlpatterns = [
-    path('<int:id>', Locker.as_view()),
+
+    path('',  include([
+        path('', Locker.as_view()),
+        path('<int:id>', Locker.as_view()),
+
+    ])),
 ]
