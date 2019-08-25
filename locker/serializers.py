@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from locker.models import Sheet, Block
+from locker.models import Sheet, Block, Transaction
 
 UserModel = get_user_model()
 
@@ -24,4 +24,10 @@ class SheetSerializer(serializers.ModelSerializer):
 class SheetSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sheet
+        exclude = ('blocks',)
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
         fields = '__all__'

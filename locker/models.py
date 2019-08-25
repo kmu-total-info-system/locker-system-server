@@ -15,6 +15,7 @@ class Block(models.Model):
         (3, 'room'),
         (4, 'locker'),
         (5, 'stairs'),
+        (0, 'None'),
     )
     LOCKER_STATES = (
         (1, '신청가능'),
@@ -33,6 +34,7 @@ class Block(models.Model):
 
     value = models.CharField(verbose_name="내용(stairs제외)", blank=True, null=True, max_length=32)
 
+    parent = models.ForeignKey('Block', blank=True, null=True, verbose_name="구역(locker)", on_delete=models.CASCADE)
     color = models.CharField(verbose_name="색깔(locker,area)", blank=True, null=True, max_length=16)
     link = models.ForeignKey('Sheet', verbose_name="연결(area)", blank=True, null=True, on_delete=models.CASCADE)
 
@@ -53,9 +55,10 @@ class Sheet(models.Model):
     def __str__(self):
         return ", ".join([str(block) for block in self.blocks.all()])
 
+
 class Transaction(TimeStampedModel):
     class Meta:
-        verbose_name_plural="신청"
+        verbose_name_plural = "신청"
         ordering = ('-created',)
 
     user = models.ForeignKey(
@@ -66,7 +69,7 @@ class Transaction(TimeStampedModel):
     )
 
     block = models.ForeignKey(
-        'Block', related_name="transaction_block", on_delete=models.CASCADE,verbose_name="타일 하나"
+        'Block', related_name="transaction_block", on_delete=models.CASCADE, verbose_name="타일 하나"
     )
 
     ip_address = models.GenericIPAddressField(
@@ -85,4 +88,31 @@ class Transaction(TimeStampedModel):
     def __str__(self):
         return '%s %s' % (self.user, self.ip_address)
 
-    pass
+
+class Time(models.Model):
+    class Meta:
+        verbose_name_plural = "신청기간"
+
+    start = models.DateTimeField(verbose_name="시작 시간")
+    end = models.DateTimeField(verbose_name="끝나는 시간")
+    permission = models.ManyToManyField('Permission',
+                                   verbose_name="권한",
+                                   related_name='time_permission',blank=True,null=True)
+
+
+class Permission(models.Model):
+    class Meta:
+        verbose_name_plural = "권한"
+
+    pivot = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=('사용자'),
+        on_delete=models.CASCADE,
+        related_name='permission_user'
+    )
+    block = models.ForeignKey(
+        'Block',
+        verbose_name="퍼미션을 적용할 대상",
+        on_delete=models.CASCADE,
+        related_name="permission_block"
+    )

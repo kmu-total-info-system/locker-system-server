@@ -51,7 +51,7 @@ class Account(APIView):
         token = request.META.get('HTTP_AUTHORIZATION')
 
         if token == None:
-            return Response({'message': '사용자가 유효하지 않습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': '토큰 유효하지 않습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             token = token.split(' ')[1]
@@ -80,7 +80,7 @@ class Account(APIView):
         token = request.META.get('HTTP_AUTHORIZATION')
 
         if token == None:
-            return Response({'message': '사용자가 유효하지 않습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'message': '토큰 유효하지 않습니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             token = token.split(' ')[1]

@@ -15,7 +15,20 @@ class SheetAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Sheet._meta.fields]
 
 @admin.register(Transaction)
-class SheetAdmin(admin.ModelAdmin):
+class TransactionAdmin(admin.ModelAdmin):
     base_model = Transaction  # Explicitly set here!
 
     list_display = [field.name for field in Transaction._meta.fields]
+
+@admin.register(Time)
+class TimeAdmin(admin.ModelAdmin):
+    base_model = Time  # Explicitly set here!
+
+    list_display = [field.name for field in Time._meta.fields]
+
+
+@admin.register(Permission)
+class PermissionAdmin(admin.ModelAdmin):
+    base_model = Permission  # Explicitly set here!
+
+    list_display = [field.name for field in Permission._meta.fields]
