@@ -89,12 +89,14 @@ class Transaction(APIView):
         else:
             return Response({'message': '사물함 정보가 올바르지 않습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        block.state = 3
+        block.save()
+
         ip_address = get_ip(request)
         user_agent = request.META['HTTP_USER_AGENT']
 
         transaction = models.Transaction(user=user, block_id=block_id, ip_address=ip_address, user_agent=user_agent)
         transaction.save()
-
         return Response(TransactionSerializer(transaction).data, status=status.HTTP_201_CREATED)
 
 class Time(APIView):
