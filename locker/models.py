@@ -30,7 +30,7 @@ class Block(models.Model):
     height = models.IntegerField(verbose_name="높이")
 
     value = models.CharField(verbose_name="내용(stairs제외)", blank=True, null=True, max_length=32)
-    #
+
     color = models.CharField(verbose_name="색깔(locker,area)", blank=True, null=True, max_length=16)
     link = models.ForeignKey('Sheet', verbose_name="연결(area)", blank=True, null=True, on_delete=models.CASCADE)
 
@@ -38,9 +38,15 @@ class Block(models.Model):
 
     direction = models.SmallIntegerField(verbose_name="계단 방향(stairs)", null=True, blank=True, choices=DIRECTIONS)
 
+    def __str__(self):
+        return self.value
+
 
 class Sheet(models.Model):
     class Meta:
         verbose_name_plural = "시트"
 
     blocks = models.ManyToManyField('Block', related_name="block_sheet", null=True, blank=True)
+
+    def __str__(self):
+        return ", ".join([str(block) for block in self.blocks.all()])
