@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from locker.views import Locker, Transaction
+from locker.views import Locker, Transaction, Time
 
 urlpatterns = [
 
@@ -24,5 +24,6 @@ urlpatterns = [
         path('', Locker.as_view()),
         path('<int:id>', Locker.as_view()),
     ])),
-    path('transaction',Transaction.as_view())
+    path('transaction',Transaction.as_view()),
+    path('time',Time.as_view())
 ]

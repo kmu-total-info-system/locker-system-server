@@ -69,7 +69,7 @@ class Transaction(APIView):
 
 
         time = Time.objects.first()
-        if time.end < timezone.now() or time.start > timezone.now():
+        if time.end < timezone.localtime() or time.start > timezone.localtime():
             return Response({'message': '신청기간이 아닙니다.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         block = Block.objects.get(id=block_id)
         if block.state != 1:
@@ -96,3 +96,7 @@ class Transaction(APIView):
         transaction.save()
 
         return Response(TransactionSerializer(transaction).data, status=status.HTTP_201_CREATED)
+
+class Time(APIView):
+    def get(self,request):
+        return Response({'time':timezone.localtime()}, status=status.HTTP_200_OK)
