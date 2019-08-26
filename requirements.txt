@@ -12,3 +12,5 @@ ktis-parser==0.3.1
 Django==2.2.4
 lxml==4.4.1
 django-ipware==2.1.0
+uwsgi==2.0.18
+django-admin-view-permission==1.9

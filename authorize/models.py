@@ -35,7 +35,7 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
     ssn = models.CharField(max_length=40, verbose_name="주민등록번호",blank=True,null=True)
     college = models.CharField(max_length=40, verbose_name="대학명",blank=True,null=True)
     school = models.CharField(max_length=40, verbose_name="스쿨이름",blank=True,null=True)
-    time = models.CharField(max_length=10, verbose_name="주/야",blank=True,null=True)
+    time = models.CharField(max_length=10, verbose_name="주/야",blank=True,null=True,choices=(('주간','주간'),('야간','야간')))
     major = models.CharField(max_length=10, verbose_name="전공",blank=True,null=True)
     date = models.CharField(max_length=40, verbose_name="입학일자",blank=True,null=True)
     status = models.CharField(max_length=10, verbose_name="재적상태",blank=True,null=True)
@@ -57,15 +57,15 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
             ret+=" "+self.name
         return ret
 
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
+    # def has_perm(self, perm, obj=None):
+    #     "Does the user have a specific permission?"
+    #     # Simplest possible answer: Yes, always
+    #     return True
+    #
+    # def has_module_perms(self, app_label):
+    #     "Does the user have permissions to view the app `app_label`?"
+    #     # Simplest possible answer: Yes, always
+    #     return True
 
     @property
     def is_staff(self):

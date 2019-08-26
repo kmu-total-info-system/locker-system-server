@@ -10,12 +10,12 @@ class Block(models.Model):
         verbose_name_plural = "타일 하나"
 
     BLOCK_TYPES = (
+        (0, 'None'),
         (1, 'hallway'),
         (2, 'area'),
         (3, 'room'),
         (4, 'locker'),
         (5, 'stairs'),
-        (0, 'None'),
         (6, 'Divide'),
     )
     LOCKER_STATES = (
@@ -44,7 +44,10 @@ class Block(models.Model):
     direction = models.SmallIntegerField(verbose_name="계단 방향(stairs)", null=True, blank=True, choices=DIRECTIONS)
 
     def __str__(self):
-        return self.value
+        if self.value != None:
+            return self.BLOCK_TYPES[self.type][1] + ' ' + self.value
+        else:
+            return self.BLOCK_TYPES[self.type][1] + ' ' + str(self.id)
 
 
 class Sheet(models.Model):
@@ -97,8 +100,8 @@ class Time(models.Model):
     start = models.DateTimeField(verbose_name="시작 시간")
     end = models.DateTimeField(verbose_name="끝나는 시간")
     permission = models.ManyToManyField('Permission',
-                                   verbose_name="권한",
-                                   related_name='time_permission',blank=True,null=True)
+                                        verbose_name="권한",
+                                        related_name='time_permission', blank=True, null=True)
 
 
 class Permission(models.Model):

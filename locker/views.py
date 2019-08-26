@@ -68,7 +68,7 @@ class Transaction(APIView):
             return Response({'message': '이미 신청한 사용자 입니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-        time = Time.objects.first()
+        time = models.Time.objects.first()
         if time.end < timezone.localtime() or time.start > timezone.localtime():
             return Response({'message': '신청기간이 아닙니다.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         block = Block.objects.get(id=block_id)
@@ -82,7 +82,6 @@ class Transaction(APIView):
             dict_user = model_to_dict(user)
             for key, value in model_to_dict(Permission.objects.get(id=permission_id).pivot).items():
                 if value != None and key != 'user_id' and key != 'name' and key != 'password' and key != 'id' and key != 'is_admin':
-                    print(key, value)
                     if dict_user[key] != value:
                         return Response({'message': '해당 사용자는 권한이 없습니다. ' + key + '가 틀립니다.'},
                                         status=status.HTTP_401_UNAUTHORIZED)

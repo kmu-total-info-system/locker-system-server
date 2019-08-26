@@ -7,6 +7,7 @@ class BlockAdmin(admin.ModelAdmin):
     base_model = Block  # Explicitly set here!
 
     list_display = [field.name for field in Block._meta.fields]
+    search_fields = ('type','id','value','state')
 
 @admin.register(Sheet)
 class SheetAdmin(admin.ModelAdmin):
