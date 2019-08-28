@@ -28,6 +28,7 @@ class SheetSimpleSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    block = BlockSerializer()
     class Meta:
         model = Transaction
         fields = '__all__'
