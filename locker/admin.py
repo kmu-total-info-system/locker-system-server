@@ -39,7 +39,7 @@ class TransactionAdmin(ImportExportModelAdmin,view_admin.AdminViewPermissionMode
         transactions = Transaction.objects.all()
         datas = []
         for transaction in transactions:
-            datas.append({'name': transaction.user.name, 'user_id': transaction.user.user_id, 'organization': '제 3대 소프트웨어 융합 학생회 리턴', 'locker': transaction.block.value, 'grade': transaction.user.grade})
+            datas.append({'name': transaction.user.name, 'user_id': transaction.user.user_id, 'organization': '제3대 소프트웨어 융합 학생회 리턴', 'locker': transaction.block.value, 'grade': transaction.user.grade})
 
         wb = generator.generate(datas)
         print(wb)

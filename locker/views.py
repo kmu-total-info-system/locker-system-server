@@ -44,6 +44,11 @@ class Transaction(APIView):
         user = token.user
         try:
             transaction = models.Transaction.objects.get(user=user)
+            other = models.Transaction.objects.filter(block_id=transaction.block_id)
+            if len(other) > 1 and other[0] != transaction:
+                transaction.delete()
+                return Response({'message': '신청한 사물함이 없습니다.'}, status=status.HTTP_204_NO_CONTENT)
+
         except:
             return Response({'message': '신청한 사물함이 없습니다.'}, status=status.HTTP_204_NO_CONTENT)
 
@@ -93,9 +98,15 @@ class Transaction(APIView):
 
         ip_address = get_ip(request)
         user_agent = request.META['HTTP_USER_AGENT']
+        check = models.Transaction.objects.filter(block_id=block_id)
+        if len(check) > 0:
+            return Response({'message': '신청 불가능한 사물함입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            transaction = models.Transaction(user=user, block_id=block_id, ip_address=ip_address, user_agent=user_agent)
+            transaction.save()
+        except:
+            return Response({'message': '신청 불가능한 사물함입니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        transaction = models.Transaction(user=user, block_id=block_id, ip_address=ip_address, user_agent=user_agent)
-        transaction.save()
         return Response(TransactionSerializer(transaction).data, status=status.HTTP_201_CREATED)
 
 class Time(APIView):
