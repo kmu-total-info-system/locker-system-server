@@ -73,7 +73,7 @@ class Transaction(TimeStampedModel):
     )
 
     block = models.ForeignKey(
-        'Block', related_name="transaction_block", on_delete=models.CASCADE, verbose_name="타일 하나"
+        'Block', related_name="transaction_block", on_delete=models.CASCADE, verbose_name="타일 하나",unique=True
     )
 
     ip_address = models.GenericIPAddressField(

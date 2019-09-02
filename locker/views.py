@@ -44,6 +44,11 @@ class Transaction(APIView):
         user = token.user
         try:
             transaction = models.Transaction.objects.get(user=user)
+            other = models.Transaction.objects.filter(block_id=transaction.block_id)
+            if len(other) > 1 and other[0] != transaction:
+                transaction.delete()
+                return Response({'message': '신청한 사물함이 없습니다.'}, status=status.HTTP_204_NO_CONTENT)
+
         except:
             return Response({'message': '신청한 사물함이 없습니다.'}, status=status.HTTP_204_NO_CONTENT)
 
@@ -75,16 +80,25 @@ class Transaction(APIView):
         if block.state != 1:
             return Response({'message': '신청 불가능한 사물함입니다.'}, status=status.HTTP_400_BAD_REQUEST)
         if block.parent != None:
+            permission_ids = []
             permissions = list(time.permission.all().values())
             for p in permissions:
                 if p["block_id"] == block.parent_id:
-                    permission_id = p["id"]
+                    permission_ids.append(p["id"])
             dict_user = model_to_dict(user)
-            for key, value in model_to_dict(Permission.objects.get(id=permission_id).pivot).items():
-                if value != None and key != 'user_id' and key != 'name' and key != 'password' and key != 'id' and key != 'is_admin':
-                    if dict_user[key] != value:
-                        return Response({'message': '해당 사용자는 권한이 없습니다. ' + key + '가 틀립니다.'},
-                                        status=status.HTTP_401_UNAUTHORIZED)
+            permission_status = False
+            for permission_id in permission_ids:
+                check = True
+                for key, value in model_to_dict(Permission.objects.get(id=permission_id).pivot).items():
+                    if value != None and key != 'user_id' and key != 'name' and key != 'password' and key != 'id' and key != 'is_admin':
+                        if dict_user[key] != value:
+                            check=False
+                if check:
+                    permission_status = True
+                    break
+            if permission_status != True:
+                return Response({'message': '해당 사용자는 권한이 없습니다. '},
+                                status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({'message': '사물함 정보가 올바르지 않습니다.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -93,9 +107,15 @@ class Transaction(APIView):
 
         ip_address = get_ip(request)
         user_agent = request.META['HTTP_USER_AGENT']
+        check = models.Transaction.objects.filter(block_id=block_id)
+        if len(check) > 0:
+            return Response({'message': '신청 불가능한 사물함입니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            transaction = models.Transaction(user=user, block_id=block_id, ip_address=ip_address, user_agent=user_agent)
+            transaction.save()
+        except:
+            return Response({'message': '신청 불가능한 사물함입니다.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        transaction = models.Transaction(user=user, block_id=block_id, ip_address=ip_address, user_agent=user_agent)
-        transaction.save()
         return Response(TransactionSerializer(transaction).data, status=status.HTTP_201_CREATED)
 
 class Time(APIView):

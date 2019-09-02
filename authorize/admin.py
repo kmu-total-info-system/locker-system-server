@@ -15,7 +15,6 @@ class AuthUserAdmin(view_admin.AdminViewPermissionModelAdmin):
                                                                                         'password',
                                                                                         'groups',
                                                                                         'is_admin',
-                                                                                        'is_active',
                                                                                         'last_login', ]]
     list_filter = (('is_active', admin.BooleanFieldListFilter),
                    ('is_admin', admin.BooleanFieldListFilter),
@@ -51,7 +50,6 @@ class AuthUserAdmin(view_admin.AdminViewPermissionModelAdmin):
                 'password',
                 'groups',
                 'is_admin',
-                'is_active',
                 'last_login',
             }
 
@@ -68,7 +66,6 @@ class AuthUserAdmin(view_admin.AdminViewPermissionModelAdmin):
                 'password',
                 'groups',
                 'is_admin',
-                'is_active',
                 'last_login',
             }
 
